@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Task List</title>
+</head>
+<body>
+    <h1>Task List</h1>
+
+    <!-- Search Form -->
+    <form method="GET" action="{% url 'todo:task_list' %}">
+        <input type="text" name="q" placeholder="Search tasks" value="{{ request.GET.q }}">
+        <button type="submit">Search</button>
+    </form>
+
+
+</body>
+</html>

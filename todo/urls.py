@@ -1,5 +1,10 @@
 from django.urls import path
-from views import *
+from todo.views import task_list_view
+
+
+app_name = 'todo'
+
+
 urlpatterns = [
-    path('',views.index,name='index' ),
+    path('', task_list_view, name='task_list' ),
 ]
