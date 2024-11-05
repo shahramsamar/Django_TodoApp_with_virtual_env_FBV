@@ -20,3 +20,14 @@ def task_create_view(request):
     else:
         form = TaskForm()
     return render(request, 'todo/task_form.html', {'form': form})
+
+def task_edit_view(request, pk):
+    task = get_object_or_404(TaskModel, pk=pk)
+    if request.method == "POST":
+        form = TaskForm(request.POST, instance=task)
+        if form.is_valid():
+            form.save()
+            return redirect('/')
+    else:
+        form = TaskForm(instance=task)
+    return render(request, 'todo/task_form.html', {'form': form, 'task': task})

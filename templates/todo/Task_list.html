@@ -80,8 +80,7 @@
             border-radius: 5px;
             margin-bottom: 10px;
             display: flex;
-            justify-content: space-between;
-            align-items: center;
+            flex-direction: column;
             background-color: #f9f9f9;
         }
 
@@ -93,6 +92,12 @@
         .task-item.not-completed {
             background-color: #ffe0e0;
             border-color: #d8b2b2;
+        }
+
+        .task-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
         .task-status {
@@ -109,8 +114,12 @@
             color: red;
         }
 
+        .task-actions {
+            margin-top: 10px;
+        }
+
         .task-actions a {
-            margin-left: 10px;
+            margin-right: 10px;
             text-decoration: none;
             color: #007bff;
         }
@@ -147,45 +156,33 @@
         <!-- Display Results Based on Search Query -->
         {% if request.GET.q %}
             <h2>Search results for "{{ request.GET.q }}":</h2>
-            <ul class="task-list">
-                {% for task in tasks %}
-                    <li class="task-item {% if task.is_done %}completed{% else %}not-completed{% endif %}">
-                        <div>
-                            <strong>{{ task.title }}</strong> - {{ task.description }}
-                        </div>
-                        <div class="task-status">
-                            {% if task.is_done %}
-                                <span>Completed</span>
-                            {% else %}
-                                <span>Not Completed</span>
-                            {% endif %}
-                        </div>
-                    </li>
-                {% empty %}
-                    <p>No results found for "{{ request.GET.q }}".</p>
-                {% endfor %}
-            </ul>
         {% else %}
             <h2>All Tasks:</h2>
-            <ul class="task-list">
-                {% for task in tasks %}
-                    <li class="task-item {% if task.is_done %}completed{% else %}not-completed{% endif %}">
+        {% endif %}
+
+        <ul class="task-list">
+            {% for task in tasks %}
+                <li class="task-item {% if task.is_done %}completed{% else %}not-completed{% endif %}">
+                    <div class="task-header">
                         <div>
                             <strong>{{ task.title }}</strong> - {{ task.description }}
                         </div>
                         <div class="task-status">
                             {% if task.is_done %}
-                                <span>Completed</span>
+                                Completed
                             {% else %}
-                                <span>Not Completed</span>
+                                Not Completed
                             {% endif %}
                         </div>
-                    </li>
-                {% empty %}
-                    <p>No tasks available.</p>
-                {% endfor %}
-            </ul>
-        {% endif %}
+                    </div>
+                    <div class="task-actions">
+                        <a href="{% url 'todo:task_edit' task.id %}">Edit</a> |
+                    </div>
+                </li>
+            {% empty %}
+                <p>No tasks found.</p>
+            {% endfor %}
+        </ul>
 
         <a href="{% url 'todo:task_create' %}" class="create-link">Create New Task</a>
     </div>
