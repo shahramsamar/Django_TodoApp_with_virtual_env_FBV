@@ -1,18 +1,193 @@
-</div><!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Task List</title>
+    <style>
+        /* Basic Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Center Content */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        /* Container Styling */
+        .container {
+            max-width: 600px;
+            width: 100%;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        /* Search Form */
+        .search-form {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .search-form input[type="text"] {
+            padding: 8px;
+            width: 70%;
+            border: 1px solid #ddd;
+            border-radius: 4px 0 0 4px;
+            outline: none;
+        }
+
+        .search-form button {
+            padding: 8px 12px;
+            border: none;
+            background-color: #007bff;
+            color: white;
+            border-radius: 0 4px 4px 0;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .search-form button:hover {
+            background-color: #0056b3;
+        }
+
+        /* Task List */
+        .task-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .task-item {
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #f9f9f9;
+        }
+
+        .task-item.completed {
+            background-color: #e0ffe0;
+            border-color: #b2d8b2;
+        }
+
+        .task-item.not-completed {
+            background-color: #ffe0e0;
+            border-color: #d8b2b2;
+        }
+
+        .task-status {
+            font-weight: bold;
+            padding: 4px 8px;
+            border-radius: 4px;
+        }
+
+        .completed .task-status {
+            color: green;
+        }
+
+        .not-completed .task-status {
+            color: red;
+        }
+
+        .task-actions a {
+            margin-left: 10px;
+            text-decoration: none;
+            color: #007bff;
+        }
+
+        .task-actions a:hover {
+            color: #0056b3;
+        }
+
+        .create-link {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 15px;
+            background-color: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+
+        .create-link:hover {
+            background-color: #0056b3;
+        }
+    </style>
 </head>
 <body>
-    <h1>Task List</h1>
+    <div class="container">
+        <h1>Task List</h1>
 
-    <!-- Search Form -->
-    <form method="GET" action="{% url 'todo:task_list' %}">
-        <input type="text" name="q" placeholder="Search tasks" value="{{ request.GET.q }}">
-        <button type="submit">Search</button>
-    </form>
+        <!-- Search Form -->
+        <form class="search-form" method="GET" action="{% url 'todo:task_list' %}">
+            <input type="text" name="q" placeholder="Search tasks" value="{{ request.GET.q }}">
+            <button type="submit">Search</button>
+        </form>
 
+        <!-- Display Results Based on Search Query -->
+        {% if request.GET.q %}
+            <h2>Search results for "{{ request.GET.q }}":</h2>
+            <ul class="task-list">
+                {% for task in tasks %}
+                    <li class="task-item {% if task.is_done %}completed{% else %}not-completed{% endif %}">
+                        <div>
+                            <strong>{{ task.title }}</strong> - {{ task.description }}
+                        </div>
+                        <div class="task-status">
+                            {% if task.is_done %}
+                                <span>Completed</span>
+                            {% else %}
+                                <span>Not Completed</span>
+                            {% endif %}
+                        </div>
+                    </li>
+                {% empty %}
+                    <p>No results found for "{{ request.GET.q }}".</p>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <h2>All Tasks:</h2>
+            <ul class="task-list">
+                {% for task in tasks %}
+                    <li class="task-item {% if task.is_done %}completed{% else %}not-completed{% endif %}">
+                        <div>
+                            <strong>{{ task.title }}</strong> - {{ task.description }}
+                        </div>
+                        <div class="task-status">
+                            {% if task.is_done %}
+                                <span>Completed</span>
+                            {% else %}
+                                <span>Not Completed</span>
+                            {% endif %}
+                        </div>
+                    </li>
+                {% empty %}
+                    <p>No tasks available.</p>
+                {% endfor %}
+            </ul>
+        {% endif %}
 
+        <a href="{% url 'todo:task_create' %}" class="create-link">Create New Task</a>
+    </div>
 </body>
 </html>
