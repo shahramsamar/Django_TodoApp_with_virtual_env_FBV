@@ -177,7 +177,9 @@
                     </div>
                     <div class="task-actions">
                         <a href="{% url 'todo:task_edit' task.id %}">Edit</a> |
-                        <a href="{% url 'todo:task_delete' task.id %}">Delete</a>
+                        <a href="{% url 'todo:task_delete' task.id %}">Delete</a>|
+                        <a href="{% url 'todo:delete_all_tasks' %}" class="delete-all-link">Delete All Tasks</a>
+
                     </div>
                 </li>
             {% empty %}

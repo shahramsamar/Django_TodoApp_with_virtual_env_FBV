@@ -39,3 +39,9 @@ def task_delete_view(request, pk):
         task.delete()
         return redirect('/')
     return render(request, 'todo/task_confirm_delete.html', {'task': task})
+
+def delete_all_tasks(request):
+    if request.method == 'POST':
+        TaskModel.objects.all().delete()  # Deletes all tasks
+        return redirect('todo:task_list')  # Redirect to task list after deletion
+    return render(request, 'todo/confirm_delete_all.html')  # Render a confirmation page if necessary
