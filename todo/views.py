@@ -31,3 +31,11 @@ def task_edit_view(request, pk):
     else:
         form = TaskForm(instance=task)
     return render(request, 'todo/task_form.html', {'form': form, 'task': task})
+
+
+def task_delete_view(request, pk):
+    task = get_object_or_404(TaskModel, pk=pk)
+    if request.method == "POST":
+        task.delete()
+        return redirect('/')
+    return render(request, 'todo/task_confirm_delete.html', {'task': task})

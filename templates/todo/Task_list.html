@@ -165,7 +165,7 @@
                 <li class="task-item {% if task.is_done %}completed{% else %}not-completed{% endif %}">
                     <div class="task-header">
                         <div>
-                            <strong>{{ task.title }}</strong> - {{ task.description }}
+                            <strong>{{task.id}} - {{ task.title }}</strong> - {{ task.description }}
                         </div>
                         <div class="task-status">
                             {% if task.is_done %}
@@ -177,6 +177,7 @@
                     </div>
                     <div class="task-actions">
                         <a href="{% url 'todo:task_edit' task.id %}">Edit</a> |
+                        <a href="{% url 'todo:task_delete' task.id %}">Delete</a>
                     </div>
                 </li>
             {% empty %}
